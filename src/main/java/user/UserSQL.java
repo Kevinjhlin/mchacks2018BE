@@ -1,4 +1,4 @@
-package persistence.user;
+package user;
 
 public class UserSQL {
 

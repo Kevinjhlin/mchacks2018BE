@@ -1,10 +1,8 @@
-package main.java.persistence.dao;
+package user;
 
 import java.sql.*;
 
 import main.java.Configuration;
-import persistence.user.UserSQL;
-import user.UserModel;
 
 public class UserDAO {
     private String database;
