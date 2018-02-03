@@ -5,8 +5,6 @@ import java.sql.*;
 import main.java.Configuration;
 
 public class userDAO {
-
-    private String sqlFile = "/sql_oper/user.psql";
     private String database;
     private String username;
     private String password;
@@ -19,7 +17,7 @@ public class userDAO {
 
     }
 
-    public getUser(int userId) {
+    public String getUser(int userId) throws Exception{
 
         //instantiate the database connection variables
         Connection conn = null;
@@ -27,25 +25,31 @@ public class userDAO {
         ResultSet rs = null;
 
         try {
-            conn = DriverManager.getConnection(database, username, password); //get connection
+            conn = DriverManager.getConnection(this.database, this.username, this.password); //get connection
             stmt = conn.createStatement();
-            String query = "select * from user where id = " + userId; //query
+            String query = "select * from \"user\" where id = " + userId; //query
             rs = stmt.executeQuery(query); //execute
-
+            while(rs.next()) {
+                int id = rs.getInt("id");
+                String username = rs.getString("username");
+                String firstname = rs.getString("firstName");
+                String lastname = rs.getString("lastname");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                Date created = rs.getDate("created");
+                Date updated = rs.getDate("updated");
+                return (id + username + firstname + lastname + email + password + created + updated);
+            }
             //retrieve values from the dataSet. Hardcoded.
-            int id = rs.getInt("id");
-            String username = rs.getString("username");
-            String lastname = rs.getString("lastname");
-            String email = rs.getString("email");
-            String password = rs.getFloat("password");
-            Date created = rs.getDate("created");
-            Date updated = rs.getDate("updated");
 
-            
+
+
+
 
         } catch (Exception ex) {
-            System.out.println(ex.toString());
-            throw ex;
+           return (ex.toString());
+
+
         } finally {
             if (rs != null) {
                 rs.close();
@@ -57,6 +61,8 @@ public class userDAO {
                 conn.close();
             }
         }
+
+        return null;
 
     }
 
