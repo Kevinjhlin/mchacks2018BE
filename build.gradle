@@ -6,6 +6,7 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.10.RELEASE")
     }
 }
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -26,4 +27,6 @@ targetCompatibility = 1.8
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile ‘postgresql:postgresql:42.2.1’
 }
+
