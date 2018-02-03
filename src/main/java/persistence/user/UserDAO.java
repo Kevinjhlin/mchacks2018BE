@@ -3,13 +3,15 @@ package main.java.persistence.dao;
 import java.sql.*;
 
 import main.java.Configuration;
+import persistence.user.UserSQL;
+import user.UserModel;
 
-public class userDAO {
+public class UserDAO {
     private String database;
     private String username;
     private String password;
 
-    public userDAO() {
+    public UserDAO() {
         Configuration config = Configuration.getInstance();
         this.database = config.getProperties().getProperty("database");
         this.username = config.getProperties().getProperty("databaseUsername");
@@ -17,7 +19,7 @@ public class userDAO {
 
     }
 
-    public String getUser(int userId) throws Exception{
+    public UserModel getUser(int userId) throws Exception{
 
         //instantiate the database connection variables
         Connection conn = null;
@@ -27,7 +29,7 @@ public class userDAO {
         try {
             conn = DriverManager.getConnection(this.database, this.username, this.password); //get connection
             stmt = conn.createStatement();
-            String query = "select * from \"user\" where id = " + userId; //query
+            String query = UserSQL.getUser(userId); //query
             rs = stmt.executeQuery(query); //execute
             while(rs.next()) {
                 int id = rs.getInt("id");
@@ -38,7 +40,9 @@ public class userDAO {
                 String password = rs.getString("password");
                 Date created = rs.getDate("created");
                 Date updated = rs.getDate("updated");
-                return (id + username + firstname + lastname + email + password + created + updated);
+                UserModel user = new UserModel(id, username, password, firstname, lastname, email);
+
+                return user;
             }
             //retrieve values from the dataSet. Hardcoded.
 
@@ -47,8 +51,7 @@ public class userDAO {
 
 
         } catch (Exception ex) {
-           return (ex.toString());
-
+           throw ex;
 
         } finally {
             if (rs != null) {

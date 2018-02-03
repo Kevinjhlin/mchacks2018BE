@@ -1,6 +1,6 @@
-package users.models;
+package user;
 
-public class AppUser {
+public class UserModel {
     private int userId;
     private String username;
     private String password;
@@ -8,7 +8,7 @@ public class AppUser {
     private String lastname;
     private String email;
 
-    public AppUser(int id, String username, String password, String firstname, String lastname, String email){
+    public UserModel(int id, String username, String password, String firstname, String lastname, String email){
         setUserId(id);
         setUsername(username);
         setPassword(password);
