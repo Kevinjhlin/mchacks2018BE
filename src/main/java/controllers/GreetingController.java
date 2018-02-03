@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import main.java.models.Greeting;
-import main.java.Configuration;
+import main.java.persistence.dao.userDAO;
 
 @RestController
 public class GreetingController {
@@ -17,8 +17,18 @@ public class GreetingController {
     private final AtomicLong counter = new AtomicLong();
 
     @PostMapping("/greeting")
-    public Greeting greeting(@RequestParam(value="name", defaultValue="World") String name) {
-        return new Greeting(counter.incrementAndGet(),
-                String.format(template, name));
+    public String greeting(@RequestParam(value="id", defaultValue="1") int id) {
+
+        userDAO user = new userDAO();
+        try{
+            String response = user.getUser(id);
+            return response;
+        }
+        catch(Exception ex) {
+            return ex.toString();
+        }
+
+//        return new Greeting(counter.incrementAndGet(),
+//                String.format(template, name));
     }
 }
