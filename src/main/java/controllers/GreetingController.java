@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
-import main.java.models.*;
+import main.java.models.Greeting;
+import main.java.Configuration;
 
 @RestController
 public class GreetingController {
