@@ -121,7 +121,7 @@ public class RoomConfigDAO {
         }
     }
 
-    public RoomConfigModel updateRoomConfig(int id, int roomId, double length, LocalDateTime timeFrameStart, LocalDateTime timeFrameEnd, int minNumOfPeople) throws Exception{
+    public RoomConfigModel updateRoomConfig(int roomId, double length, LocalDateTime timeFrameStart, LocalDateTime timeFrameEnd, int minNumOfPeople) throws Exception{
         //instantiate the database connection variables
         Connection conn = null;
         Statement stmt = null;
@@ -130,11 +130,20 @@ public class RoomConfigDAO {
         try {
             conn = DriverManager.getConnection(this.database, this.username, this.password); //get connection
             stmt = conn.createStatement();
-            String query = RoomConfigSQL.updateRoomConfig(id, length, timeFrameStart, timeFrameEnd, minNumOfPeople); //query
-            stmt.execute(query); //execute
-            stmt.close();
-            RoomConfigModel roomConfig = getRoomConfig(roomId);
-            return roomConfig;
+            String query = RoomConfigSQL.updateRoomConfig(roomId, length, timeFrameStart, timeFrameEnd, minNumOfPeople); //query
+            rs = stmt.executeQuery(query); //execute
+            while(rs.next()) {
+                int id = rs.getInt("id");
+                int room_id = rs.getInt("room_id");
+                double lengthRecord = rs.getDouble("length");
+                Timestamp timeFrameStartRecord = rs.getTimestamp("time_frame_start");
+                Timestamp timeFrameEndRecord = rs.getTimestamp("time_frame_end");
+                int minNumOfPeopleRecord = rs.getInt("min_num_of_ppl");
+                RoomConfigModel roomConfig = new RoomConfigModel(id, room_id, lengthRecord, timeFrameStartRecord, timeFrameEndRecord, minNumOfPeopleRecord);
+                return roomConfig;
+            }
+
+
             //retrieve values from the dataSet. Hardcoded.
 
         } catch (Exception ex) {
@@ -151,6 +160,7 @@ public class RoomConfigDAO {
                 conn.close();
             }
         }
+        return null;
 
     }
 }

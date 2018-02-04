@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UserAuthController {
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password) {
         UserDAO dao = new UserDAO();

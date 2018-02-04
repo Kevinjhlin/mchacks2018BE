@@ -22,15 +22,15 @@ public class RoomController {
     }
 
     @PostMapping("/")
-    public String createRoom(@RequestParam String name, @RequestParam int owner, @RequestParam String description){
+    public RoomModel createRoom(@RequestParam String name, @RequestParam int owner, @RequestParam String description){
         RoomDAO room = new RoomDAO();
         try{
             String url = getSaltString();
-            room.createRoom(name, owner, description, url);
-            return "Succesfully created a new room!";
+            RoomModel response = room.createRoom(name, owner, description, url);
+            return response;
         }
         catch(Exception ex) {
-            return "Room has not been created!";
+            return null;
         }
     }
 

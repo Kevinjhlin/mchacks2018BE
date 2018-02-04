@@ -15,7 +15,7 @@ public class TimeSlotController {
 
 
     @PostMapping("user/{userid}/timeslot")
-    public String createTimeSlot(@PathVariable int userid, @RequestParam Long startDate, @RequestParam Long endDate){
+    public TimeSlotModel createTimeSlot(@PathVariable int userid, @RequestParam Long startDate, @RequestParam Long endDate){
         TimeSlotDAO timeSlotDAO = new TimeSlotDAO();
 
         //parse to LocalDateTime. This is assuming a long input
@@ -28,11 +28,11 @@ public class TimeSlotController {
                         TimeZone.getDefault().toZoneId());
 
         try{
-            String response = timeSlotDAO.createTimeSlot(userid, startDateParsed, endDateParsed);
+            TimeSlotModel response = timeSlotDAO.createTimeSlot(userid, startDateParsed, endDateParsed);
             return response;
         }
         catch(Exception ex) {
-            return "TimeSlot has failed to be created!";
+            return null;
         }
     }
 
@@ -61,7 +61,7 @@ public class TimeSlotController {
     }
 
     @PutMapping("/user/{userid}//timeslot/{timeslotid}")
-    public TimeSlotModel[] updateTimeSlot(@PathVariable int userid, @PathVariable int timeslotid, @RequestParam long startDate, @RequestParam long endDate){
+    public TimeSlotModel updateTimeSlot(@PathVariable int userid, @PathVariable int timeslotid, @RequestParam long startDate, @RequestParam long endDate){
         TimeSlotDAO room = new TimeSlotDAO();
         try{
 
@@ -74,7 +74,7 @@ public class TimeSlotController {
                     LocalDateTime.ofInstant(Instant.ofEpochSecond(endDate),
                             TimeZone.getDefault().toZoneId());
 
-            TimeSlotModel[] response = room.updateTimeSlot(userid, timeslotid, startDateParsed, endDateParsed);
+            TimeSlotModel response = room.updateTimeSlot(timeslotid, startDateParsed, endDateParsed);
             return response;
         }
         catch(Exception ex) {

@@ -91,19 +91,26 @@ public class UserDAO {
         return queryExec;
     }
 
-    public boolean updateUser(int id, String firstname, String lastname, String email) throws Exception{
+    public UserModel updateUser(int id, String firstname, String lastname, String email) throws Exception{
         //instantiate the database connection variables
         Connection conn = null;
         Statement stmt = null;
-        boolean queryExec = false;
+        ResultSet rs = null;
 
         try{
             conn = DriverManager.getConnection(this.database, this.username, this.password); //get connection
             stmt = conn.createStatement();
             String query = UserSQL.updateUser(id, firstname, lastname, email); //query
-            int count = stmt.executeUpdate(query); //'count' is number of rows affected
-            if(count > 0){
-                queryExec = true;
+            rs = stmt.executeQuery(query); //'count' is number of rows affected
+            while(rs.next()){
+                int idRecord = rs.getInt("id");
+                String usernameRecord = rs.getString("username");
+                String firstnameRecord = rs.getString("firstName");
+                String lastnameRecord = rs.getString("lastname");
+                String emailRecord = rs.getString("email");
+                UserModel user = new UserModel(idRecord, usernameRecord, null, firstnameRecord, lastnameRecord, emailRecord);
+
+                return user;
             }
 
         } catch (Exception ex) {
@@ -116,7 +123,7 @@ public class UserDAO {
                 conn.close();
             }
         }
-        return queryExec;
+       return null;
     }
 
     public boolean isValidPassword(String username, String password) throws Exception{

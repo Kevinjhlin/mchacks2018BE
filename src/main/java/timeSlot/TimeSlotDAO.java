@@ -25,7 +25,7 @@ public class TimeSlotDAO {
         this.password = config.getProperties().getProperty("databasePassword");
     }
 
-    public String createTimeSlot(int ownerId, LocalDateTime startDate, LocalDateTime endDate) throws Exception {
+    public TimeSlotModel createTimeSlot(int ownerId, LocalDateTime startDate, LocalDateTime endDate) throws Exception {
 
         //instantiate the database connection variables
         Connection conn = null;
@@ -36,8 +36,17 @@ public class TimeSlotDAO {
             conn = DriverManager.getConnection(this.database, this.username, this.password); //get connection
             stmt = conn.createStatement();
             String query = TimeSlotSQL.createTimeSlot(ownerId, startDate, endDate); //query
-            stmt.execute(query);
-            return "TimeSlot has been created!";
+            rs = stmt.executeQuery(query);
+            while(rs.next()){
+                int id = rs.getInt("id");
+                int owner = rs.getInt("owner");
+
+                Timestamp startDateStamp = rs.getTimestamp("start_date");
+                Timestamp endDateStamp = rs.getTimestamp("end_date");
+
+                TimeSlotModel timeSlot = new TimeSlotModel(id, owner, startDateStamp, endDateStamp);
+                return timeSlot;
+            }
 
         } catch (Exception ex) {
             throw ex;
@@ -50,7 +59,7 @@ public class TimeSlotDAO {
                 conn.close();
             }
         }
-
+    return null;
     }
 
     public String deleteTimeSlot(int id) throws Exception{
@@ -118,18 +127,28 @@ public class TimeSlotDAO {
         }
     }
 
-    public TimeSlotModel[] updateTimeSlot(int owner, int timeslotid, LocalDateTime startDate, LocalDateTime endDate) throws Exception{
+    public TimeSlotModel updateTimeSlot(int timeslotid, LocalDateTime startDate, LocalDateTime endDate) throws Exception{
         //instantiate the database connection variables
         Connection conn = null;
         Statement stmt = null;
+        ResultSet rs = null;
 
 
         try {
             conn = DriverManager.getConnection(this.database, this.username, this.password); //get connection
             stmt = conn.createStatement();
             String query = TimeSlotSQL.updateTimeSlot(timeslotid, startDate, endDate); //query
-            stmt.execute(query);
-            return getTimeSlots(owner);
+            rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                int id = rs.getInt("id");
+                int owner = rs.getInt("owner");
+
+                Timestamp startDateStamp = rs.getTimestamp("start_date");
+                Timestamp endDateStamp = rs.getTimestamp("end_date");
+
+                TimeSlotModel timeSlot = new TimeSlotModel(id, owner, startDateStamp, endDateStamp);
+                return timeSlot;
+            }
 
         } catch (Exception ex) {
             throw ex;
@@ -141,7 +160,10 @@ public class TimeSlotDAO {
             if (conn != null) {
                 conn.close();
             }
+            if(rs != null){
+                rs.close();
+            }
         }
+        return null;
     }
-
 }

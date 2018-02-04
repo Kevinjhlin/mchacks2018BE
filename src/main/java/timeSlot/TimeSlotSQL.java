@@ -7,7 +7,7 @@ public class TimeSlotSQL {
 
     public static String createTimeSlot(int ownerid, LocalDateTime startDate, LocalDateTime endDate){
         return "insert into \"timetable\" (owner, start_date, end_date) values ('" + ownerid + "','" +
-                startDate + "','" + endDate + "')";
+                startDate + "','" + endDate + "') returning *";
     }
 
     public static String deleteTimeSlot(int id){
@@ -19,6 +19,6 @@ public class TimeSlotSQL {
     }
 
     public static String updateTimeSlot(int id, LocalDateTime startDate, LocalDateTime endDate) {
-        return "update \"timetable\" SET start_date = '" + startDate + "', end_date = '" + endDate + "' where id = " + id;
+        return "update \"timetable\" SET start_date = '" + startDate + "', end_date = '" + endDate + "' where id = " + id + " returning *";
     }
 }
