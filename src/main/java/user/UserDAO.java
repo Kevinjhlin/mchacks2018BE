@@ -36,8 +36,6 @@ public class UserDAO {
                 String lastname = rs.getString("lastname");
                 String email = rs.getString("email");
                 String password = rs.getString("password");
-                Date created = rs.getDate("created");
-                Date updated = rs.getDate("updated");
                 UserModel user = new UserModel(id, username, password, firstname, lastname, email);
 
                 return user;
