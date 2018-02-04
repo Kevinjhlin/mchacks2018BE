@@ -1,9 +1,8 @@
 package main.java.user;
+import user.*;
 
 
 import org.springframework.web.bind.annotation.*;
-import user.UserDAO;
-import user.UserModel;
 
 
 @RestController
@@ -21,5 +20,20 @@ public class UserController {
         catch(Exception ex) {
             return null;
         }
+    }
+
+    @PutMapping("/{id}")
+    public String updateUser(@PathVariable int id, @RequestParam String firstname,
+                             @RequestParam String lastname, @RequestParam String email) {
+        UserDAO user = new UserDAO();
+        try {
+            boolean updateUserSuccess = user.updateUser(id, firstname, lastname, email);
+            if(updateUserSuccess) {
+                return "Update User success";
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+        return "Update User fail";
     }
 }
