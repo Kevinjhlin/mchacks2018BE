@@ -1,4 +1,4 @@
-package main.java.controllers;
+package main.java.user;
 
 
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import user.UserModel;
 public class UserController {
 
     @GetMapping("/{id}")
-    public UserModel greeting(@PathVariable int id) {
+    public UserModel getUser(@PathVariable int id) {
 
         UserDAO user = new UserDAO();
         try{
@@ -21,6 +21,5 @@ public class UserController {
         catch(Exception ex) {
             return null;
         }
-
     }
 }
