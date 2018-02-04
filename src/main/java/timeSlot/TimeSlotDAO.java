@@ -1,25 +1,26 @@
-package main.java.persistence.dao;
+package timeSlot;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import main.java.Configuration;
+import org.apache.tomcat.jni.Local;
 
-public class userDAO {
 
-    private String sqlFile = "/sql_oper/user.psql";
+public class TimeSlotDAO {
     private String database;
     private String username;
     private String password;
 
-    public userDAO() {
+    public TimeSlotDAO() {
         Configuration config = Configuration.getInstance();
         this.database = config.getProperties().getProperty("database");
         this.username = config.getProperties().getProperty("databaseUsername");
         this.password = config.getProperties().getProperty("databasePassword");
-
     }
 
-    public getUser(int userId) {
+    public String createTimeSlot(int ownerId, LocalDateTime startDate, LocalDateTime endDate) throws Exception {
 
         //instantiate the database connection variables
         Connection conn = null;
@@ -27,25 +28,15 @@ public class userDAO {
         ResultSet rs = null;
 
         try {
-            conn = DriverManager.getConnection(database, username, password); //get connection
+            conn = DriverManager.getConnection(this.database, this.username, this.password); //get connection
             stmt = conn.createStatement();
-            String query = "select * from user where id = " + userId; //query
-            rs = stmt.executeQuery(query); //execute
-
-            //retrieve values from the dataSet. Hardcoded.
-            int id = rs.getInt("id");
-            String username = rs.getString("username");
-            String lastname = rs.getString("lastname");
-            String email = rs.getString("email");
-            String password = rs.getFloat("password");
-            Date created = rs.getDate("created");
-            Date updated = rs.getDate("updated");
-
-            
+            String query = TimeSlotSQL.createTimeSlot(ownerId, startDate, endDate); //query
+            stmt.execute(query);
+            return "TimeSlot has been created!";
 
         } catch (Exception ex) {
-            System.out.println(ex.toString());
             throw ex;
+
         } finally {
             if (rs != null) {
                 rs.close();
@@ -59,6 +50,5 @@ public class userDAO {
         }
 
     }
-
 
 }

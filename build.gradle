@@ -26,7 +26,8 @@ targetCompatibility = 1.8
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.1'
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    compile ‘postgresql:postgresql:42.2.1’
+
 }
 
