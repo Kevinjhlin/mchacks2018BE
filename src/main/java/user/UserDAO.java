@@ -1,5 +1,4 @@
 //package main.java.user;
-//import user.*;
 package user;
 
 import java.sql.*;
@@ -39,6 +38,8 @@ public class UserDAO {
                 String email = rs.getString("email");
                 //String password = rs.getString("password");
                 UserModel user = new UserModel(id, username, null, firstname, lastname, email);
+
+
 
                 return user;
             }
