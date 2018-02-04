@@ -8,6 +8,9 @@ public class UserModel {
     private String lastname;
     private String email;
 
+    public UserModel(){
+        super();
+    }
     public UserModel(int id, String username, String password, String firstname, String lastname, String email){
         setUserId(id);
         setUsername(username);
@@ -15,6 +18,10 @@ public class UserModel {
         setFirstName(firstname);
         setLastName(lastname);
         setEmail(email);
+    }
+    public UserModel(String username, String password){
+        setUsername(username);
+        setPassword(password);
     }
 
     public int getUserId() {

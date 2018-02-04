@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import timeSlot.TimeSlotDAO;
 import timeSlot.TimeSlotModel;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.TimeZone;
@@ -15,20 +16,13 @@ public class TimeSlotController {
 
 
     @PostMapping("user/{userid}/timeslot")
-    public TimeSlotModel createTimeSlot(@PathVariable int userid, @RequestParam Long startDate, @RequestParam Long endDate){
+    public TimeSlotModel createTimeSlot(@PathVariable int userid, @RequestBody TimeSlotModel timeSlotRequest){
         TimeSlotDAO timeSlotDAO = new TimeSlotDAO();
-
-        //parse to LocalDateTime. This is assuming a long input
-        LocalDateTime startDateParsed =
-                LocalDateTime.ofInstant(Instant.ofEpochSecond(startDate),
-                        TimeZone.getDefault().toZoneId());
-
-        LocalDateTime endDateParsed =
-                LocalDateTime.ofInstant(Instant.ofEpochSecond(endDate),
-                        TimeZone.getDefault().toZoneId());
+        Timestamp startDate = timeSlotRequest.getStartDate();
+        Timestamp endDate = timeSlotRequest.getEndDate();
 
         try{
-            TimeSlotModel response = timeSlotDAO.createTimeSlot(userid, startDateParsed, endDateParsed);
+            TimeSlotModel response = timeSlotDAO.createTimeSlot(userid, startDate, endDate);
             return response;
         }
         catch(Exception ex) {
@@ -61,20 +55,14 @@ public class TimeSlotController {
     }
 
     @PutMapping("/user/{userid}//timeslot/{timeslotid}")
-    public TimeSlotModel updateTimeSlot(@PathVariable int userid, @PathVariable int timeslotid, @RequestParam long startDate, @RequestParam long endDate){
+    public TimeSlotModel updateTimeSlot(@PathVariable int userid, @PathVariable int timeslotid, @RequestBody TimeSlotModel timeSlotRequest){
         TimeSlotDAO room = new TimeSlotDAO();
         try{
+            Timestamp startDate = timeSlotRequest.getStartDate();
+            Timestamp endDate = timeSlotRequest.getEndDate();
 
-            //parse to LocalDateTime. This is assuming a long input
-            LocalDateTime startDateParsed =
-                    LocalDateTime.ofInstant(Instant.ofEpochSecond(startDate),
-                            TimeZone.getDefault().toZoneId());
 
-            LocalDateTime endDateParsed =
-                    LocalDateTime.ofInstant(Instant.ofEpochSecond(endDate),
-                            TimeZone.getDefault().toZoneId());
-
-            TimeSlotModel response = room.updateTimeSlot(timeslotid, startDateParsed, endDateParsed);
+            TimeSlotModel response = room.updateTimeSlot(timeslotid, startDate, endDate);
             return response;
         }
         catch(Exception ex) {

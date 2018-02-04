@@ -25,7 +25,7 @@ public class TimeSlotDAO {
         this.password = config.getProperties().getProperty("databasePassword");
     }
 
-    public TimeSlotModel createTimeSlot(int ownerId, LocalDateTime startDate, LocalDateTime endDate) throws Exception {
+    public TimeSlotModel createTimeSlot(int ownerId, Timestamp startDate, Timestamp endDate) throws Exception {
 
         //instantiate the database connection variables
         Connection conn = null;
@@ -127,7 +127,7 @@ public class TimeSlotDAO {
         }
     }
 
-    public TimeSlotModel updateTimeSlot(int timeslotid, LocalDateTime startDate, LocalDateTime endDate) throws Exception{
+    public TimeSlotModel updateTimeSlot(int timeslotid, Timestamp startDate, Timestamp endDate) throws Exception{
         //instantiate the database connection variables
         Connection conn = null;
         Statement stmt = null;

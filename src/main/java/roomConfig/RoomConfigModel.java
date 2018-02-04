@@ -10,6 +10,10 @@ public class RoomConfigModel {
     private Timestamp timeFrameEnd;
     private int minNumOfPeople;
 
+    public RoomConfigModel(){
+        super();
+    }
+
     public RoomConfigModel (int id, int roomId, double length, Timestamp timeFrameStart, Timestamp timeFrameEnd, int minNumOfPeople){
         setId(id);
         setRoomId(roomId);

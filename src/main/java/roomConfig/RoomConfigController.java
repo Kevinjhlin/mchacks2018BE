@@ -2,6 +2,7 @@ package roomConfig;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.TimeZone;
@@ -24,17 +25,14 @@ public class RoomConfigController {
     }
 
     @PutMapping("/{roomId}")
-    public RoomConfigModel updateRoomConfig(@PathVariable int id, @PathVariable int roomId, @RequestParam double length, @RequestParam long timeFrameStart, @RequestParam long timeFrameEnd, @RequestParam int minNumOfPeople) {
+    public RoomConfigModel updateRoomConfig(@PathVariable int id, @PathVariable int roomId, @RequestBody RoomConfigModel roomConfigRequest) {
         RoomConfigDAO roomConfig = new RoomConfigDAO();
         try {
-            LocalDateTime timeFrameStartParsed =
-                    LocalDateTime.ofInstant(Instant.ofEpochSecond(timeFrameStart),
-                            TimeZone.getDefault().toZoneId());
-
-            LocalDateTime timeFrameEndParsed =
-                    LocalDateTime.ofInstant(Instant.ofEpochSecond(timeFrameEnd),
-                            TimeZone.getDefault().toZoneId());
-            RoomConfigModel response = roomConfig.updateRoomConfig(roomId, length, timeFrameStartParsed, timeFrameEndParsed, minNumOfPeople);
+            double length = roomConfigRequest.getLength();
+            Timestamp timeFrameStart = roomConfigRequest.getTimeFrameStart();
+            Timestamp timeFrameEnd = roomConfigRequest.getTimeFrameEnd();
+            int minNumOfPeople = roomConfigRequest.getMinNumOfPeople();
+            RoomConfigModel response = roomConfig.updateRoomConfig(roomId, length, timeFrameStart, timeFrameEnd, minNumOfPeople);
             return response;
         } catch (Exception ex) {
             return null;

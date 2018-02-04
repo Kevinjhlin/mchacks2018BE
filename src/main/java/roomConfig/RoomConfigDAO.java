@@ -121,7 +121,7 @@ public class RoomConfigDAO {
         }
     }
 
-    public RoomConfigModel updateRoomConfig(int roomId, double length, LocalDateTime timeFrameStart, LocalDateTime timeFrameEnd, int minNumOfPeople) throws Exception{
+    public RoomConfigModel updateRoomConfig(int roomId, double length, Timestamp timeFrameStart, Timestamp timeFrameEnd, int minNumOfPeople) throws Exception{
         //instantiate the database connection variables
         Connection conn = null;
         Statement stmt = null;

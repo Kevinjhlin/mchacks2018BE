@@ -10,6 +10,10 @@ public class TimeSlotModel {
     private Timestamp startDate;
     private Timestamp endDate;
 
+    public TimeSlotModel() {
+        super();
+    }
+
     public TimeSlotModel (int id, int ownerid, Timestamp startDate, Timestamp endDate){
         setId(id);
         setOwnerId(ownerid);

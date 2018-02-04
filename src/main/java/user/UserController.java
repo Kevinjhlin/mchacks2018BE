@@ -21,8 +21,11 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserModel updateUser(@PathVariable int id, @RequestParam String firstname,
-                             @RequestParam String lastname, @RequestParam String email) {
+    public UserModel updateUser(@PathVariable int id, @RequestBody UserModel userRequest) {
+
+        String firstname = userRequest.getFirstName();
+        String lastname = userRequest.getLastName();
+        String email = userRequest.getEmail();
         UserDAO user = new UserDAO();
         try {
             UserModel response = user.updateUser(id, firstname, lastname, email);

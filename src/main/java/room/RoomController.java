@@ -22,10 +22,13 @@ public class RoomController {
     }
 
     @PostMapping("/")
-    public RoomModel createRoom(@RequestParam String name, @RequestParam int owner, @RequestParam String description){
+    public RoomModel createRoom(@RequestBody RoomModel roomRequest){
         RoomDAO room = new RoomDAO();
         try{
             String url = getSaltString();
+            int owner = roomRequest.getOwner();
+            String description = roomRequest.getDescription();
+            String name = roomRequest.getName();
             RoomModel response = room.createRoom(name, owner, description, url);
             return response;
         }
@@ -47,9 +50,11 @@ public class RoomController {
     }
 
     @PutMapping("/{id}")
-    public RoomModel updateRoom(@PathVariable int id, @RequestParam String name, @RequestParam String description){
+    public RoomModel updateRoom(@PathVariable int id, @RequestBody RoomModel roomRequest){
         RoomDAO room = new RoomDAO();
         try{
+            String name = roomRequest.getName();
+            String description = roomRequest.getDescription();
             RoomModel response = room.updateRoom(id, name, description);
             return response;
         }
