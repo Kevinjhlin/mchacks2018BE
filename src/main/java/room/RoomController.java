@@ -3,7 +3,7 @@ import org.springframework.web.bind.annotation.*;
 import room.*;
 import java.util.Random;
 
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/room")
 public class RoomController {

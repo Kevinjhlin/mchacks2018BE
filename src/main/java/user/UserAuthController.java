@@ -4,7 +4,7 @@ import user.*;
 
 import org.springframework.web.bind.annotation.*;
 
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class UserAuthController {
 

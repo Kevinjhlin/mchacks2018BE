@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.TimeZone;
 
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class TimeSlotController {
 
