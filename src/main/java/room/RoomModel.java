@@ -7,6 +7,11 @@ public class RoomModel {
     private String url;
     private String description;
 
+
+    public RoomModel(){
+        super();
+    }
+
     public RoomModel(int id, String url, String name, int owner, String description){
         setId(id);
         setUrl(url);

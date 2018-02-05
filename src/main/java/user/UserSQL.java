@@ -34,7 +34,7 @@ public class UserSQL {
                 "SET firstname = '" + firstname + "', " +
                 "lastname = '" + lastname + "', " +
                 "email = '" + email + "'" +
-                "WHERE id = " + id;
+                "WHERE id = " + id + "returning *";
     }
 
 //    public static String getUserPasswordFromID(int id)  {

@@ -1,31 +1,24 @@
-package timeSlot;
+package roomConfig;
 
 import java.sql.*;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
 
 import main.java.Configuration;
-import org.apache.tomcat.jni.Local;
-
-import javax.xml.transform.Result;
 
 
-public class TimeSlotDAO {
+public class RoomConfigDAO {
     private String database;
     private String username;
     private String password;
 
-    public TimeSlotDAO() {
+    public RoomConfigDAO() {
         Configuration config = Configuration.getInstance();
         this.database = config.getProperties().getProperty("database");
         this.username = config.getProperties().getProperty("databaseUsername");
         this.password = config.getProperties().getProperty("databasePassword");
     }
 
-    public TimeSlotModel createTimeSlot(int ownerId, Timestamp startDate, Timestamp endDate) throws Exception {
+    public RoomConfigModel getRoomConfig(int roomId) throws Exception{
 
         //instantiate the database connection variables
         Connection conn = null;
@@ -35,135 +28,139 @@ public class TimeSlotDAO {
         try {
             conn = DriverManager.getConnection(this.database, this.username, this.password); //get connection
             stmt = conn.createStatement();
-            String query = TimeSlotSQL.createTimeSlot(ownerId, startDate, endDate); //query
-            rs = stmt.executeQuery(query);
-            while(rs.next()){
+            String query = RoomConfigSQL.getRoomConfig(roomId); //query
+            rs = stmt.executeQuery(query); //execute
+            while(rs.next()) { //
                 int id = rs.getInt("id");
-                int owner = rs.getInt("owner");
-
-                Timestamp startDateStamp = rs.getTimestamp("start_date");
-                Timestamp endDateStamp = rs.getTimestamp("end_date");
-
-                TimeSlotModel timeSlot = new TimeSlotModel(id, owner, startDateStamp, endDateStamp);
-                return timeSlot;
+                int room_id = rs.getInt("room_id");
+                double length = rs.getDouble("length");
+                Timestamp timeFrameStart = rs.getTimestamp("time_frame_start");
+                Timestamp timeFrameEnd = rs.getTimestamp("time_frame_end");
+                int minNumOfPeople = rs.getInt("min_num_of_ppl");
+                RoomConfigModel roomConfig = new RoomConfigModel(id, room_id, length, timeFrameStart, timeFrameEnd, minNumOfPeople);
+                return roomConfig;
             }
 
         } catch (Exception ex) {
-            throw ex;
+            //uh
 
         } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-    return null;
-    }
-
-    public String deleteTimeSlot(int id) throws Exception{
-        //instantiate the database connection variables
-        Connection conn = null;
-        Statement stmt = null;
-
-
-        try {
-            conn = DriverManager.getConnection(this.database, this.username, this.password); //get connection
-            stmt = conn.createStatement();
-            String query = TimeSlotSQL.deleteTimeSlot(id); //query
-            stmt.execute(query);
-            return "TimeSlot has been deleted!";
-
-        } catch (Exception ex) {
-            throw ex;
-
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-
-    }
-
-    public TimeSlotModel[] getTimeSlots(int ownerid) throws Exception{
-        //instantiate the database connection variables
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            conn = DriverManager.getConnection(this.database, this.username, this.password); //get connection
-            stmt = conn.createStatement();
-            String query = TimeSlotSQL.getTimeSlots(ownerid); //query
-            rs = stmt.executeQuery(query);
-            ArrayList<TimeSlotModel> timeSlotArrayList = new ArrayList<>();
-            while(rs.next()) {
-                int id = rs.getInt("id");
-                int owner = rs.getInt("owner");
-
-                Timestamp startDate = rs.getTimestamp("start_date");
-
-                Timestamp endDate = rs.getTimestamp("end_date");
-
-                TimeSlotModel timeSlot = new TimeSlotModel(id, owner, startDate, endDate);
-                timeSlotArrayList.add(timeSlot);
-            }
-            TimeSlotModel[] timeSlotArray = timeSlotArrayList.toArray(new TimeSlotModel[timeSlotArrayList.size()]);
-            return timeSlotArray;
-        } catch (Exception ex) {
-            throw ex;
-
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-        }
-    }
-
-    public TimeSlotModel updateTimeSlot(int timeslotid, Timestamp startDate, Timestamp endDate) throws Exception{
-        //instantiate the database connection variables
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-
-
-        try {
-            conn = DriverManager.getConnection(this.database, this.username, this.password); //get connection
-            stmt = conn.createStatement();
-            String query = TimeSlotSQL.updateTimeSlot(timeslotid, startDate, endDate); //query
-            rs = stmt.executeQuery(query);
-            while(rs.next()) {
-                int id = rs.getInt("id");
-                int owner = rs.getInt("owner");
-
-                Timestamp startDateStamp = rs.getTimestamp("start_date");
-                Timestamp endDateStamp = rs.getTimestamp("end_date");
-
-                TimeSlotModel timeSlot = new TimeSlotModel(id, owner, startDateStamp, endDateStamp);
-                return timeSlot;
-            }
-
-        } catch (Exception ex) {
-            throw ex;
-
-        } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (conn != null) {
-                conn.close();
-            }
-            if(rs != null){
+            if (rs != null) {
                 rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return null;
+
+    }
+
+    public String createRoomConfig(int owner) throws Exception {
+
+        //instantiate the database connection variables
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DriverManager.getConnection(this.database, this.username, this.password); //get connection
+            stmt = conn.createStatement();
+            String query = RoomConfigSQL.createRoomConfig(owner); //query
+            stmt.execute(query);
+            return "Room Config has been created!";
+
+
+        } catch (Exception ex) {
+            throw ex;
+
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+    }
+
+    public String deleteRoomConfig(int roomId) throws Exception {
+        //instantiate the database connection variables
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DriverManager.getConnection(this.database, this.username, this.password); //get connection
+            stmt = conn.createStatement();
+            String query = RoomConfigSQL.deleteRoomConfig(roomId); //query
+            stmt.execute(query); //execute
+            return "Room config has been deleted!";
+
+        } catch (Exception ex) {
+            throw ex;
+
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+    }
+
+    public RoomConfigModel updateRoomConfig(int roomId, double length, Timestamp timeFrameStart, Timestamp timeFrameEnd, int minNumOfPeople) throws Exception{
+        //instantiate the database connection variables
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DriverManager.getConnection(this.database, this.username, this.password); //get connection
+            stmt = conn.createStatement();
+            String query = RoomConfigSQL.updateRoomConfig(roomId, length, timeFrameStart, timeFrameEnd, minNumOfPeople); //query
+            rs = stmt.executeQuery(query); //execute
+            while(rs.next()) {
+                int id = rs.getInt("id");
+                int room_id = rs.getInt("room_id");
+                double lengthRecord = rs.getDouble("length");
+                Timestamp timeFrameStartRecord = rs.getTimestamp("time_frame_start");
+                Timestamp timeFrameEndRecord = rs.getTimestamp("time_frame_end");
+                int minNumOfPeopleRecord = rs.getInt("min_num_of_ppl");
+                RoomConfigModel roomConfig = new RoomConfigModel(id, room_id, lengthRecord, timeFrameStartRecord, timeFrameEndRecord, minNumOfPeopleRecord);
+                return roomConfig;
+            }
+
+
+            //retrieve values from the dataSet. Hardcoded.
+
+        } catch (Exception ex) {
+            throw ex;
+
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (conn != null) {
+                conn.close();
             }
         }
         return null;
+
     }
 }

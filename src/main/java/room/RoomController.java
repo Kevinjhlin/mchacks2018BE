@@ -3,7 +3,7 @@ import org.springframework.web.bind.annotation.*;
 import room.*;
 import java.util.Random;
 
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/room")
 public class RoomController {
@@ -22,15 +22,18 @@ public class RoomController {
     }
 
     @PostMapping("/")
-    public String createRoom(@RequestParam String name, @RequestParam int owner, @RequestParam String description){
+    public RoomModel createRoom(@RequestBody RoomModel roomRequest){
         RoomDAO room = new RoomDAO();
         try{
             String url = getSaltString();
-            room.createRoom(name, owner, description, url);
-            return "Succesfully created a new room!";
+            int owner = roomRequest.getOwner();
+            String description = roomRequest.getDescription();
+            String name = roomRequest.getName();
+            RoomModel response = room.createRoom(name, owner, description, url);
+            return response;
         }
         catch(Exception ex) {
-            return "Room has not been created!";
+            return null;
         }
     }
 
@@ -47,9 +50,11 @@ public class RoomController {
     }
 
     @PutMapping("/{id}")
-    public RoomModel updateRoom(@PathVariable int id, @RequestParam String name, @RequestParam String description){
+    public RoomModel updateRoom(@PathVariable int id, @RequestBody RoomModel roomRequest){
         RoomDAO room = new RoomDAO();
         try{
+            String name = roomRequest.getName();
+            String description = roomRequest.getDescription();
             RoomModel response = room.updateRoom(id, name, description);
             return response;
         }

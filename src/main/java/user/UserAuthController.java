@@ -4,27 +4,36 @@ import user.*;
 
 import org.springframework.web.bind.annotation.*;
 
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class UserAuthController {
 
+
     @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password) {
+    public boolean login(@RequestBody UserModel credentials) {
+        String username = credentials.getUsername();
+        String password = credentials.getPassword();
         UserDAO dao = new UserDAO();
         try{
             if(dao.isValidPassword(username, password)) {
-                return "Login success";
+                return true;
             }
         }
         catch(Exception ex) {
-            return null;
+            return false;
         }
-        return "Login fail";
+        return false;
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String username, @RequestParam String password, @RequestParam String firstname,
-                           @RequestParam String lastname, @RequestParam String email) {
+    public String register(@RequestBody UserModel userRequest) {
+
+        String username = userRequest.getUsername();
+        String password = userRequest.getPassword();
+        String firstname = userRequest.getFirstName();
+        String lastname = userRequest.getFirstName();
+        String email = userRequest.getEmail();
+
         UserDAO dao = new UserDAO();
         try{
             boolean userExists = dao.usernameExists(username);

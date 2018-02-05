@@ -1,14 +1,20 @@
 package timeSlot;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class TimeSlotModel {
     private int id;
     private int ownerid;
-    private Date startDate;
-    private Date endDate;
+    private Timestamp startDate;
+    private Timestamp endDate;
 
-    public TimeSlotModel (int id, int ownerid, Date startDate, Date endDate){
+    public TimeSlotModel() {
+        super();
+    }
+
+    public TimeSlotModel (int id, int ownerid, Timestamp startDate, Timestamp endDate){
         setId(id);
         setOwnerId(ownerid);
         setStartDate(startDate);
@@ -22,11 +28,11 @@ public class TimeSlotModel {
         return this.ownerid;
     }
 
-    public Date getStartDate() {
+    public Timestamp getStartDate() {
         return startDate;
     }
 
-    public Date getEndDate() {
+    public Timestamp getEndDate() {
         return endDate;
     }
 
@@ -38,11 +44,11 @@ public class TimeSlotModel {
         this.ownerid = ownerid;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 }

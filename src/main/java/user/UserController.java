@@ -2,7 +2,7 @@ package main.java.user;
 import user.*;
 import org.springframework.web.bind.annotation.*;
 
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -21,17 +21,18 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable int id, @RequestParam String firstname,
-                             @RequestParam String lastname, @RequestParam String email) {
+    public UserModel updateUser(@PathVariable int id, @RequestBody UserModel userRequest) {
+
+        String firstname = userRequest.getFirstName();
+        String lastname = userRequest.getLastName();
+        String email = userRequest.getEmail();
         UserDAO user = new UserDAO();
         try {
-            boolean updateUserSuccess = user.updateUser(id, firstname, lastname, email);
-            if(updateUserSuccess) {
-                return "Update User success";
-            }
+            UserModel response = user.updateUser(id, firstname, lastname, email);
+            return response;
         } catch (Exception ex) {
             return null;
         }
-        return "Update User fail";
+
     }
 }
